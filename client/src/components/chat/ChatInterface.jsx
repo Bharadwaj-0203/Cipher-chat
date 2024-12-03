@@ -126,6 +126,7 @@ function ChatInterface() {
       messageId,
       content: messageContent,
       recipientId: activeAgent.id,
+      publicKey: activeAgent.publicKey
     });
 
     setNewMessage('');

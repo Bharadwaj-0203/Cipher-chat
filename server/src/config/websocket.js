@@ -3,6 +3,7 @@ const WebSocket = require('ws');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Message = require('../models/Message');
+const EncryptionManager = require('../utils/encryption');
 
 class WebSocketServer {
   constructor(server) {
@@ -21,6 +22,10 @@ class WebSocketServer {
       ws.on('message', async (data) => {
         try {
           const message = JSON.parse(data);
+
+          if(message.content != null){
+            message.content = EncryptionManager.encryptMessage(message.content, message.publicKey);
+          }          
           console.log('Received message:', message);
 
           if (message.type === 'auth') {
@@ -100,7 +105,9 @@ class WebSocketServer {
       };
 
       // Send to recipient
+      const recipient = await User.findById(message.recipientId);
       const recipientWs = this.clients.get(message.recipientId)?.ws;
+      messageData.content = EncryptionManager.decryptMessage(message.content, recipient.privateKey);
       if (recipientWs?.readyState === WebSocket.OPEN) {
         console.log('Sending message to recipient');
         recipientWs.send(JSON.stringify(messageData));
@@ -134,11 +141,12 @@ class WebSocketServer {
 
   async broadcastUserList() {
     try {
-      const users = await User.find({}).select('username isOnline').lean();
+      const users = await User.find({}).lean();
       
       const userList = users.map(user => ({
         id: user._id.toString(),
         username: user.username,
+        publicKey: user.publicKey,
         isOnline: this.clients.has(user._id.toString())
       }));
 

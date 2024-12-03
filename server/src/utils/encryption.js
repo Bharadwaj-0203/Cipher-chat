@@ -8,6 +8,16 @@ class EncryptionManager {
       privateKeyEncoding: { type: 'pkcs8', format: 'pem' }
     });
   }
+  
+  encryptMessage = (message, publicKey) => {
+    const encrypted = crypto.publicEncrypt(publicKey, Buffer.from(message));
+    return encrypted.toString('base64');
+  };
+
+  decryptMessage = (encryptedMessage, privateKey) => {
+    const decrypted = crypto.privateDecrypt(privateKey, Buffer.from(encryptedMessage, 'base64'));
+    return decrypted.toString();
+  };
 
   hashPassword(password) {
     const salt = crypto.randomBytes(32);
