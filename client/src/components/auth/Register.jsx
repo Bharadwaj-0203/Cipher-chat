@@ -1,18 +1,6 @@
 // src/components/auth/Register.jsx
 import { checkPasswordStrength } from '../../services/passwordCheck';
-import {
-  Box,
-  Container,
-  VStack,
-  Input,
-  Button,
-  Heading,
-  Text,
-  useToast,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-} from '@chakra-ui/react';
+import { Box, Container, VStack, Input, Button, Heading, Text, useToast, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../../services/api';

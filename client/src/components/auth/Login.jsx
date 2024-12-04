@@ -1,8 +1,5 @@
 // src/components/auth/Login.jsx
-import {
-  Box, Container, VStack, Input, Button, Heading, Text, useToast,
-  Alert, AlertIcon, AlertTitle, AlertDescription
-} from '@chakra-ui/react';
+import { Box, Container, VStack, Input, Button, Heading, Text, useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useAuth } from './AuthContext';
 import { Link } from 'react-router-dom';
